@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-center">
+  <div class="card text-center" style="width: 35rem;">
+    <%= image_tag "logo3.png", class: "card-img-top", alt: "CollabHub Logo" %>
+    <div class="card-body">
+      <h2 class="card-title">Welcome to My Basecamp</h2>
+      <p class="card-text fw-bold">Manage your projects efficiently and collaborate with your team.</p>
+      
+      <div class="mt-4 bg-light p-4 rounded-3 mt-4">
+        <h3 class="h5">About Our Platform</h3>
+        <p class="card-text">
+          We're dedicated to making project management simple and effective. 
+          Our platform helps teams stay organized, meet deadlines, and achieve their goals.
+        </p>
+        <p class="card-text">
+          Whether you're managing a small team or a large organization, 
+          Basecamp provides the tools you need to succeed.
+        </p>
+      </div>
+
+      <div class="btn-group mt-3" role="group">
+        <%= link_to "Get Started", new_user_registration_path, class: "btn btn-lg border border-white", style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+        <%= link_to "Log In", new_user_session_path, class: "btn btn-lg border border-white", style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+      </div>
+      <style>
+        .btn:hover {
+          background-color: var(--bs-danger); /* Darker red */
+          color: white; /* Ensure text is visible */
+        }
+      </style>
+    </div>
+    
+    <div class="card-footer bg-dark-subtle text-secondary fs-6">
+      <span class="text-muted" style="font-size: 0.8rem;">
+        This tool is built as part of a StartSchool assignment and is completely free to use.
+      </span>
+    </div>
+  </div>
+</div>
+

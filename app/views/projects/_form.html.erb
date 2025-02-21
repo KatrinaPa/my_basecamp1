@@ -1,0 +1,36 @@
+<%= form_with(model: project) do |form| %>
+  <% if project.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+
+      <ul>
+        <% project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+
+  <div class="field form-group mb-3">
+    <%= form.label :name %>
+    <%= form.text_field :name, class:"form-control", placeholder:"Project Name" %>
+  </div>
+
+  <div class="field form-group mb-3">
+    <%= form.label :description %>
+    <%= form.textarea :description, class:"form-control", placeholder:"Project Description" %>
+  </div>
+  
+  <div class="field form-group mb-3">
+    <% form.label :ID %>
+    <%= form.number_field :user_id, id: :project_user_id, class:"form-control", value: current_user.id, type: :hidden %>
+  </div>
+
+  <div>
+  <%= form.submit "Submit", class: "btn border border-white text-white", 
+    style: "background-color: var(--bs-secondary); transition: background-color 0.3s ease-in-out;", 
+    onmouseover: "this.style.backgroundColor='#343a40'", 
+    onmouseout: "this.style.backgroundColor='var(--bs-secondary)'" %>
+  </div>
+<% end %>

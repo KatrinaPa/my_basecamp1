@@ -1,0 +1,10 @@
+<p class="fs-2 fw-lighter">Editing project</p>
+<div class="jumbotron p-5 rounded" style="background-color: var(--bs-success-bg-subtle);">
+  <%= render "form", project: @project %>
+</div>
+<br>
+
+<div class="d-flex gap-2">
+  <%= link_to "Show project", @project, class: "btn btn-outline-secondary btn-sm" %>
+  <%= link_to "Back to projects", projects_path, class: "btn btn-outline-secondary btn-sm" %>
+</div>
