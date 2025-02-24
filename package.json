@@ -1,0 +1,11 @@
+{
+  "name": "my_basecamp1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "KatrinaPa <115956554+KatrinaPa@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@hotwired/turbo-rails": "^8.0.12",
+    "@rails/ujs": "^7.1.3-4"
+  }
+}
