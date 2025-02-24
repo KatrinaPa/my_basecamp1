@@ -1,16 +1,32 @@
-<h2>Forgot your password?</h2>
+<div class="d-flex justify-content-center">
+  <div class="card text-center" style="width: 35rem;">
+    <div class="card-body">
+      <h2 class="card-title mb-4">Forgot your password?</h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "px-4" }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        <div class="form-group mb-4">
+          <%= f.label :email, class: "form-label" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", 
+              class: "form-control text-center",
+              placeholder: "Enter your email address",
+              style: "max-width: 400px; margin: 0 auto;" %>
+        </div>
+
+        <div class="d-grid gap-2 mb-3">
+          <%= f.submit "Send Reset Instructions", 
+              class: "btn border border-white",
+              style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s; max-width: 300px; margin: 0 auto;" %>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="card-footer bg-dark-subtle text-secondary fs-6">
+      <div class="d-flex justify-content-center gap-3">
+        <%= link_to "Sign in", new_session_path(resource_name), class: "btn btn-sm btn-outline-secondary" %>
+        <%= link_to "Sign up", new_registration_path(resource_name), class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
