@@ -8,9 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.find_or_create_by!(email: 'admin@world.org') do |user|
-  user.name = 'Admin User'
-  user.password = 'adminpassword'
-  user.password_confirmation = 'adminpassword'
-  user.role = 'admin'
-end
+admin_user = User.find_or_initialize_by(email: 'admin@world.org')
+admin_user.name = 'Admin User'
+admin_user.password = 'adminpassword'
+admin_user.password_confirmation = 'adminpassword'
+admin_user.role = 'admin'
+admin_user.save!
