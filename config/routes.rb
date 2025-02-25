@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks"
   }
 
-  resources :users, only: [ :index ] do
+  resources :users do
     member do
       patch :make_admin
       patch :remove_admin

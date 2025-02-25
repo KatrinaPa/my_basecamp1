@@ -5,7 +5,11 @@ class ProjectsController < ApplicationController
 
   # GET /projects or /projects.json
   def index
-    @projects = Project.all
+    @projects = if current_user&.admin?
+      Project.all.includes(:user)  # Include user to avoid N+1 queries
+    else
+      current_user ? current_user.projects : Project.none
+    end
   end
 
   # GET /projects/1 or /projects/1.json
@@ -63,8 +67,10 @@ class ProjectsController < ApplicationController
   end
 
   def correct_user
-    @project = current_user.projects.find_by(id: params[:id])
-    redirect_to projects_path, notice: "Not Authorized to Edit this Project" if @project.nil?
+    @project = Project.find_by(id: params[:id])
+    unless current_user&.admin? || (current_user && @project.user == current_user)
+      redirect_to projects_path, notice: "Not Authorized to Edit this Project"
+    end
   end
 
 

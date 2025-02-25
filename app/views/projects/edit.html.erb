@@ -1,10 +1,22 @@
-<p class="fs-2 fw-lighter">Editing project</p>
-<div class="jumbotron p-5 rounded" style="background-color: var(--bs-success-bg-subtle);">
-  <%= render "form", project: @project %>
-</div>
-<br>
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-header border-0" style="background-color: var(--bs-success-bg-subtle);">
+          <h2 class="card-title mb-0">Edit Project</h2>
+        </div>
 
-<div class="d-flex gap-2">
-  <%= link_to "Show project", @project, class: "btn btn-outline-secondary btn-sm" %>
-  <%= link_to "Back to projects", projects_path, class: "btn btn-outline-secondary btn-sm" %>
+        <div class="card-body">
+          <%= render "form", project: @project %>
+        </div>
+
+        <div class="card-footer border-0 bg-light">
+          <div class="d-flex gap-2">
+            <%= link_to "Show this project", @project, class: "btn btn-outline-secondary" %>
+            <%= link_to "Back to projects", projects_path, class: "btn btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
