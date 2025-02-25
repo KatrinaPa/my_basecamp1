@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :require_admin
-  before_action :set_user, only: [:edit, :update, :destroy]
-  before_action :prevent_self_deletion, only: [:destroy]
+  before_action :set_user, only: [ :edit, :update, :destroy, :make_admin, :remove_admin ]
+  before_action :prevent_self_deletion, only: [ :destroy ]
 
   def index
     @users = User.all
@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to users_path, notice: 'User was successfully updated.'
+      redirect_to users_path, notice: "User was successfully updated."
     else
       render :edit
     end
@@ -21,7 +21,17 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    redirect_to users_path, notice: 'User was successfully deleted.'
+    redirect_to users_path, notice: "User was successfully deleted."
+  end
+
+  def make_admin
+    @user.update(role: "admin")
+    redirect_to users_path, notice: "#{@user.name || @user.email} has been promoted to admin."
+  end
+
+  def remove_admin
+    @user.update(role: "user")
+    redirect_to users_path, notice: "#{@user.name || @user.email} has been demoted to regular user."
   end
 
   private
@@ -36,13 +46,13 @@ class UsersController < ApplicationController
 
   def require_admin
     unless current_user&.admin?
-      redirect_to root_path, alert: 'Access denied. Admin privileges required.'
+      redirect_to root_path, alert: "Access denied. Admin privileges required."
     end
   end
 
   def prevent_self_deletion
     if @user == current_user
-      redirect_to users_path, alert: 'You cannot delete your own account.'
+      redirect_to users_path, alert: "You cannot delete your own account."
     end
   end
 end
