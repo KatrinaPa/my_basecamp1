@@ -1,7 +1,7 @@
 <div class="container py-4">
   <!-- Header Section -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="display-6 mb-0"><%= current_user&.admin? ? "All Projects" : "My Projects" %></h1>
+    <h1 class="display-6 mb-0">My Projects</h1>
     <%= link_to new_project_path, class: "btn btn-lg border-0", style: "background-color: var(--bs-danger-bg-subtle); transition: all 0.3s;" do %>
       <i class="bi bi-plus-circle me-2"></i>New Project
     <% end %>
@@ -17,11 +17,6 @@
               <h5 class="card-title text-truncate mb-0" title="<%= project.name %>">
                 <%= project.name %>
               </h5>
-              <% if current_user&.admin? %>
-                <small class="text-muted">
-                  Owner: <%= project.user&.name || 'No owner' %>
-                </small>
-              <% end %>
             </div>
             
             <!-- Card Body -->
@@ -38,18 +33,18 @@
             <!-- Card Footer -->
             <div class="card-footer bg-light border-0">
               <div class="d-flex gap-2 justify-content-end">
-                <%= link_to project, class: "btn btn-outline-secondary btn-sm", title: "View Details" do %>
-                  <i class="bi bi-eye"></i>
-                <% end %>
-                <% if current_user&.admin? || project.user == current_user %>
-                  <%= link_to edit_project_path(project), class: "btn btn-outline-secondary btn-sm", title: "Edit Project" do %>
-                    <i class="bi bi-pencil"></i>
-                  <% end %>
-                  <%= button_to project, method: :delete, class: "btn btn-outline-danger btn-sm", 
-                      data: { confirm: "Are you sure you want to delete this project?" }, title: "Delete Project" do %>
-                    <i class="bi bi-trash"></i>
-                  <% end %>
-                <% end %>
+              <%= link_to project, class: "btn btn-outline-secondary btn-sm", title: "View Details" do %>
+              <i class="bi bi-eye"></i>
+              <% end %>
+              <% if project.admin?(current_user) %>
+              <%= link_to edit_project_path(project), class: "btn btn-outline-secondary btn-sm", title: "Edit Project" do %>
+              <i class="bi bi-pencil"></i>
+              <% end %>
+              <%= button_to project, method: :delete, class: "btn btn-outline-danger btn-sm",
+              data: { confirm: "Are you sure you want to delete this project?" }, title: "Delete Project" do %>
+              <i class="bi bi-trash"></i>
+              <% end %>
+              <% end %>
               </div>
             </div>
           </div>

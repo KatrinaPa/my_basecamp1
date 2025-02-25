@@ -1,87 +1,121 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_project, only: [ :show, :edit, :update, :destroy, :manage_members ]
+  before_action :authorize_member!, only: [ :show ]
+  before_action :authorize_admin!, only: [ :edit, :update, :destroy, :manage_members ]
 
-  # GET /projects or /projects.json
   def index
-    @projects = if current_user&.admin?
-      Project.all.includes(:user)  # Include user to avoid N+1 queries
-    else
-      current_user ? current_user.projects : Project.none
-    end
+    @projects = Project.visible_to(current_user)
   end
 
-  # GET /projects/1 or /projects/1.json
   def show
-    @project = Project.find(params[:id])
   end
 
-  # GET /projects/new
   def new
-    #@project = Project.new #!!!comented out after Association
-    @project = current_user.projects.build
+    @project = Project.new
   end
 
-  # GET /projects/1/edit
   def edit
   end
 
-  # POST /projects or /projects.json
   def create
-    #@project = Project.new(project_params) #!!!comented out after Association
-    @project = current_user.projects.build(project_params)
+    @project = current_user.projects.new(project_params)
 
-    respond_to do |format|
-      if @project.save
-        format.html { redirect_to @project, notice: "Project was successfully created." }
-        format.json { render :show, status: :created, location: @project }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
+    if @project.save
+      redirect_to @project, notice: "Project was successfully created."
+    else
+      render :new
     end
   end
 
-  # PATCH/PUT /projects/1 or /projects/1.json
   def update
-    respond_to do |format|
-      if @project.update(project_params)
-        format.html { redirect_to @project, notice: "Project was successfully updated." }
-        format.json { render :show, status: :ok, location: @project }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
+    if @project.update(project_params)
+      redirect_to @project, notice: "Project was successfully updated."
+    else
+      render :edit
     end
   end
 
-  # DELETE /projects/1 or /projects/1.json
   def destroy
-    @project.destroy!
+    @project.destroy
+    redirect_to projects_url, notice: "Project was successfully destroyed."
+  end
 
-    respond_to do |format|
-      format.html { redirect_to projects_path, status: :see_other, notice: "Project was successfully destroyed." }
-      format.json { head :no_content }
+  # New method to manage project members
+  def manage_members
+    @members = @project.members
+    @project_memberships = @project.project_memberships.includes(:user)
+  end
+
+  # Add a member to a project
+  def add_member
+    @project = Project.find(params[:id])
+    authorize_admin!
+
+    @user = User.find_by(email: params[:email])
+
+    if @user.nil?
+      redirect_to manage_members_project_path(@project), alert: "User not found."
+      return
+    end
+
+    membership = @project.project_memberships.find_or_initialize_by(user: @user)
+    membership.role = params[:role] || "member"
+
+    if membership.save
+      redirect_to manage_members_project_path(@project), notice: "Member was successfully added."
+    else
+      redirect_to manage_members_project_path(@project), alert: "Failed to add member."
     end
   end
 
-  def correct_user
-    @project = Project.find_by(id: params[:id])
-    unless current_user&.admin? || (current_user && @project.user == current_user)
-      redirect_to projects_path, notice: "Not Authorized to Edit this Project"
+  # Update a member's role in a project
+  def update_member
+    @project = Project.find(params[:id])
+    authorize_admin!
+
+    @membership = @project.project_memberships.find(params[:membership_id])
+
+    if @membership.update(role: params[:role])
+      redirect_to manage_members_project_path(@project), notice: "Member role was successfully updated."
+    else
+      redirect_to manage_members_project_path(@project), alert: "Failed to update member role."
     end
   end
 
+  # Remove a member from a project
+  def remove_member
+    @project = Project.find(params[:id])
+    authorize_admin!
+
+    @membership = @project.project_memberships.find(params[:membership_id])
+
+    if @membership.destroy
+      redirect_to manage_members_project_path(@project), notice: "Member was successfully removed."
+    else
+      redirect_to manage_members_project_path(@project), alert: "Failed to remove member."
+    end
+  end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = Project.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def project_params
-      params.require(:project).permit(:name, :description, :user_id)
+  def set_project
+    @project = Project.find(params[:id])
+  end
+
+  def project_params
+    params.require(:project).permit(:name, :description)
+  end
+
+  def authorize_admin!
+    unless @project.admin?(current_user)
+      redirect_to project_path(@project), alert: "You do not have admin rights for this project."
     end
+  end
+
+  def authorize_member!
+    unless @project.member?(current_user)
+      redirect_to projects_path, alert: "You do not have access to this project."
+    end
+  end
 end
