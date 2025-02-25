@@ -1,0 +1,29 @@
+<!-- app/views/task_lists/_form.html.erb -->
+<%= form_with(model: [@project, @task_list], local: true) do |f| %>
+  <% if @task_list.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Errors</h4>
+      <ul class="mb-0">
+        <% @task_list.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :title, class: "form-label" %>
+    <%= f.text_field :title, class: "form-control", required: true, autofocus: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, class: "form-label" %>
+    <%= f.text_area :description, class: "form-control", rows: 5 %>
+    <div class="form-text">Optional: Provide more details about this task list</div>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2">
+    <%= link_to 'Cancel', project_task_lists_path(@project), class: "btn btn-outline-secondary" %>
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

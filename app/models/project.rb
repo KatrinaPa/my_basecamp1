@@ -5,6 +5,9 @@ class Project < ApplicationRecord
     has_many :project_memberships, dependent: :destroy
     has_many :members, through: :project_memberships, source: :user
 
+    # Add task lists relationship
+    has_many :task_lists, dependent: :destroy
+
     # Scope to find projects a user is a member of
     scope :visible_to, ->(user) {
       left_joins(:project_memberships)
