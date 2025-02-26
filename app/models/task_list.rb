@@ -8,4 +8,14 @@ class TaskList < ApplicationRecord
     return 0 if tasks.empty?
     (tasks.where(completed: true).count.to_f / tasks.count.to_f * 100).round
   end
+
+  def update_completion_percentage
+    if tasks.count > 0
+      completed = tasks.where(completed: true).count
+      percentage = (completed.to_f / tasks.count * 100).round
+      update_column(:completion_percentage, percentage)
+    else
+      update_column(:completion_percentage, 0)
+    end
+  end
 end

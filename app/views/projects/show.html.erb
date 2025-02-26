@@ -1,24 +1,70 @@
 <br/>
 <div class="jumbotron p-5 rounded" style="background-color: var(--bs-success-bg-subtle);">
-  <p class="fs-2 fw-light"><%= @project.name %></p>
-  <div class="bg-white p-3 rounded shadow-sm">
-    <p class="lead mb-0"><%= @project.description %></p>
-  </div>
-  
-  <!-- Add Project Members section -->
-  <div class="bg-white p-3 rounded shadow-sm mt-3">
-    <h5 class="mb-3">Project Members</h5>
-    <div class="d-flex flex-wrap gap-2">
-      <div class="badge bg-primary p-2">
-        <%= @project.user.name || @project.user.email %> (Creator)
-      </div>
-      <% @project.project_memberships.includes(:user).each do |membership| %>
-        <div class="badge <%= membership.admin? ? 'bg-info' : 'bg-secondary' %> p-2">
-          <%= membership.user.name || membership.user.email %>
-          <% if membership.admin? %> (Admin)<% end %>
-        </div>
-      <% end %>
+  <!-- Main Project Info -->
+  <div class="mb-4">
+    <h1 class="display-5 mb-3"><%= @project.name %></h1>
+    <div class="bg-white p-4 rounded shadow-sm">
+      <p class="lead mb-0" style="color: #666;"><%= @project.description %></p>
     </div>
+  </div>
+
+  <!-- Footer Section with Members and Actions -->
+  <div class="bg-white p-4 rounded shadow-sm">
+    <!-- Project Members -->
+    <div class="mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i>Project Members</h5>
+        <% if @project.admin?(current_user) %>
+          <%= link_to manage_members_project_path(@project), 
+              class: "btn",
+              style: "background-color: var(--bs-danger-bg-subtle); transition: all 0.3s; padding: 0.5rem 1rem;",
+              onmouseover: "this.style.backgroundColor='#343a40'; this.style.color='white'",
+              onmouseout: "this.style.backgroundColor='var(--bs-danger-bg-subtle)'; this.style.color='#212529'" do %>
+            <i class="bi bi-people"></i> Manage Members
+          <% end %>
+        <% end %>
+      </div>
+      
+      <div class="d-flex flex-wrap gap-2">
+        <div class="badge p-2 fs-6 fw-normal" style="background-color: var(--bs-success-bg-subtle); color: #212529;">
+          <%= @project.user.name || @project.user.email %> (Creator)
+        </div>
+        <% @project.project_memberships.includes(:user).each do |membership| %>
+          <% if membership.admin? %>
+            <div class="badge p-2 fs-6 fw-normal" style="background-color: #dee2e6; color: #212529;">
+              <%= membership.user.name || membership.user.email %> (Admin)
+            </div>
+          <% else %>
+            <div class="badge p-2 fs-6 fw-normal" style="background-color: #dee2e6; color: #212529;">
+              <%= membership.user.name || membership.user.email %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Project Actions -->
+    <% if @project.admin?(current_user) %>
+      <div class="border-top pt-3">
+        <div class="d-flex gap-2 justify-content-end">
+          <%= link_to edit_project_path(@project), 
+              class: "btn btn-outline-secondary btn-sm",
+              style: "transition: all 0.3s;",
+              onmouseover: "this.style.backgroundColor='#343a40'; this.style.color='white'",
+              onmouseout: "this.style.backgroundColor=''; this.style.color=''" do %>
+            <i class="bi bi-pencil"></i> Edit Project
+          <% end %>
+          <%= button_to @project, method: :delete, 
+              data: { confirm: "Are you sure you want to delete this project?" }, 
+              class: "btn btn-outline-secondary btn-sm",
+              style: "transition: all 0.3s;",
+              onmouseover: "this.style.backgroundColor='var(--bs-danger)'; this.style.color='white'",
+              onmouseout: "this.style.backgroundColor=''; this.style.color=''" do %>
+            <i class="bi bi-trash"></i> Delete
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
 
@@ -33,8 +79,8 @@
       <div class="d-flex flex-wrap gap-3">
         <a href="<%= project_task_lists_path(@project) %>" class="text-decoration-none">
           <div class="text-center p-3 border rounded hover-lift" style="min-width: 120px; transition: all 0.2s;">
-            <i class="bi bi-list-check text-primary display-6"></i>
-            <div class="mt-2">To-Dos</div>
+            <i class="bi bi-list-check" style="font-size: 2.5rem; color: var(--bs-success);"></i>
+            <div class="mt-2" style="color: var(--bs-success);">To-Dos</div>
           </div>
         </a>
         
@@ -64,7 +110,9 @@
   <div class="card shadow-sm">
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
       <h5 class="mb-0">Recent To-Dos</h5>
-      <a href="<%= project_task_lists_path(@project) %>" class="btn btn-sm btn-outline-primary">View All</a>
+      <a href="<%= project_task_lists_path(@project) %>" 
+         class="btn btn-sm" 
+         style="background-color: var(--bs-success-bg-subtle);">View All</a>
     </div>
     <div class="card-body">
       <% task_lists = @project.task_lists.order(created_at: :desc).limit(3) %>
@@ -75,7 +123,9 @@
           <h5 class="mt-3">No task lists yet</h5>
           <p>Keep your project organized by creating to-do lists</p>
           <% if @project.admin?(current_user) %>
-            <a href="<%= new_project_task_list_path(@project) %>" class="btn btn-primary mt-2">
+            <a href="<%= new_project_task_list_path(@project) %>" 
+               class="btn mt-2" 
+               style="background-color: var(--bs-danger-bg-subtle);">
               <i class="bi bi-plus-circle me-1"></i> Create First To-Do List
             </a>
           <% end %>
@@ -86,13 +136,15 @@
             <a href="<%= project_task_list_path(@project, task_list) %>" class="list-group-item list-group-item-action">
               <div class="d-flex w-100 justify-content-between align-items-center">
                 <h6 class="mb-1"><%= task_list.title %></h6>
-                <span class="badge <%= task_list.completion_percentage == 100 ? 'bg-success' : 'bg-primary' %>">
+                <span class="badge" style="background-color: var(--bs-success-bg-subtle); color: var(--bs-success);">
                   <%= task_list.completion_percentage %>%
                 </span>
               </div>
               <div class="progress mt-2" style="height: 5px;">
-                <div class="progress-bar" role="progressbar" style="width: <%= task_list.completion_percentage %>%;" 
-                    aria-valuenow="<%= task_list.completion_percentage %>" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-success" role="progressbar" 
+                     style="width: <%= task_list.completion_percentage %>%;" 
+                     aria-valuenow="<%= task_list.completion_percentage %>" 
+                     aria-valuemin="0" aria-valuemax="100"></div>
               </div>
               <small class="text-muted">
                 <%= task_list.tasks.where(completed: true).count %> of <%= task_list.tasks.count %> tasks complete
@@ -105,16 +157,10 @@
   </div>
 </div>
 
-<br/>
-    
-<div class="d-flex gap-2">
-  <% if @project.admin?(current_user) %>
-    <%= link_to "Manage Members", manage_members_project_path(@project), class: "btn btn-outline-primary btn-sm" %>
-    <%= link_to "Edit", edit_project_path(@project), class: "btn btn-outline-secondary btn-sm" %>
-    <%= button_to "Delete", @project, method: :delete, data: { confirm: "Are you sure you want to delete this project?" }, class: "btn btn-outline-danger btn-sm" %>
+<div class="mt-4 mb-4">
+  <%= link_to projects_path, class: "btn btn-outline-secondary btn-sm" do %>
+    <i class="bi bi-arrow-left"></i> Back to projects
   <% end %>
-  
-  <%= link_to "Back to projects", projects_path, class: "btn btn-outline-secondary btn-sm" %>
 </div>
 
 <style>

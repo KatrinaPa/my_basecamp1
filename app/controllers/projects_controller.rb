@@ -1,8 +1,8 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: [ :show, :edit, :update, :destroy, :manage_members ]
+  before_action :set_project, only: [ :show, :edit, :update, :destroy, :manage_members, :update_member, :remove_member, :add_member ]
   before_action :authorize_member!, only: [ :show ]
-  before_action :authorize_admin!, only: [ :edit, :update, :destroy, :manage_members ]
+  before_action :authorize_admin!, only: [ :edit, :update, :destroy, :manage_members, :update_member, :remove_member, :add_member ]
 
   def index
     @projects = Project.visible_to(current_user)
@@ -71,12 +71,10 @@ class ProjectsController < ApplicationController
 
   # Update a member's role in a project
   def update_member
-    @project = Project.find(params[:id])
-    authorize_admin!
+    @membership = @project.project_memberships.find_by!(user_id: params[:user_id])
+    new_role = @membership.admin? ? 'member' : 'admin'
 
-    @membership = @project.project_memberships.find(params[:membership_id])
-
-    if @membership.update(role: params[:role])
+    if @membership.update(role: new_role)
       redirect_to manage_members_project_path(@project), notice: "Member role was successfully updated."
     else
       redirect_to manage_members_project_path(@project), alert: "Failed to update member role."
@@ -85,10 +83,7 @@ class ProjectsController < ApplicationController
 
   # Remove a member from a project
   def remove_member
-    @project = Project.find(params[:id])
-    authorize_admin!
-
-    @membership = @project.project_memberships.find(params[:membership_id])
+    @membership = @project.project_memberships.find_by!(user_id: params[:user_id])
 
     if @membership.destroy
       redirect_to manage_members_project_path(@project), notice: "Member was successfully removed."

@@ -1,25 +1,34 @@
 <!-- app/views/task_lists/show.html.erb -->
 <div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <div class="d-flex align-items-center gap-2">
-        <h1 class="h2 mb-0"><%= @task_list.title %></h1>
-        <span class="badge <%= @task_list.completion_percentage == 100 ? 'bg-success' : 'bg-primary' %>">
-          <%= @task_list.completion_percentage %>% Complete
-        </span>
-      </div>
-      <p class="text-muted mb-0"><%= @project.name %></p>
-    </div>
+  <!-- Header Section -->
+  <div class="mb-4">
+    <h1 class="h2 mb-2"><%= @task_list.title %></h1>
+    <p class="text-muted mb-3"><%= @project.name %></p>
     
-    <div class="d-flex gap-2">
-      <% if @project.admin?(current_user) %>
-        <%= link_to edit_project_task_list_path(@project, @task_list), class: "btn btn-sm btn-outline-secondary" do %>
-          <i class="bi bi-pencil"></i> Edit List
+    <!-- Action Buttons and Completion Badge -->
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-2">
+        <% if @project.admin?(current_user) %>
+          <%= link_to edit_project_task_list_path(@project, @task_list), 
+              class: "btn btn-outline-secondary btn-sm",
+              style: "transition: all 0.3s;",
+              onmouseover: "this.style.backgroundColor='#6c757d'; this.style.color='white'",
+              onmouseout: "this.style.backgroundColor=''; this.style.color=''" do %>
+            <i class="bi bi-pencil"></i> Edit List
+          <% end %>
         <% end %>
-      <% end %>
-      <%= link_to project_task_lists_path(@project), class: "btn btn-sm btn-outline-secondary" do %>
-        <i class="bi bi-arrow-left"></i> Back to Lists
-      <% end %>
+        <%= link_to project_task_lists_path(@project), 
+            class: "btn btn-outline-secondary btn-sm",
+            style: "transition: all 0.3s;",
+            onmouseover: "this.style.backgroundColor='#6c757d'; this.style.color='white'",
+            onmouseout: "this.style.backgroundColor=''; this.style.color=''" do %>
+          <i class="bi bi-arrow-left"></i> Back to Lists
+        <% end %>
+      </div>
+
+      <span class="badge p-2" style="background-color: var(--bs-success-bg-subtle); color: var(--bs-success);">
+        <%= @task_list.completion_percentage %>% Complete
+      </span>
     </div>
   </div>
   
@@ -34,8 +43,10 @@
   
   <!-- Progress bar -->
   <div class="progress mb-4" style="height: 10px;">
-    <div class="progress-bar bg-success" role="progressbar" style="width: <%= @task_list.completion_percentage %>%;" 
-         aria-valuenow="<%= @task_list.completion_percentage %>" aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="progress-bar bg-success" role="progressbar" 
+         style="width: <%= @task_list.completion_percentage %>%;" 
+         aria-valuenow="<%= @task_list.completion_percentage %>" 
+         aria-valuemin="0" aria-valuemax="100"></div>
   </div>
 
   <div class="card shadow-sm mb-4">
@@ -83,7 +94,9 @@
     <div class="card-body border-top">
       <%= form_with(model: [@project, @task_list, @task], local: true, class: "d-flex") do |f| %>
         <%= f.text_field :title, class: "form-control me-2", placeholder: "Add a new task...", required: true %>
-        <%= f.submit "Add Task", class: "btn btn-primary" %>
+        <%= f.submit "Add Task", 
+            class: "btn",
+            style: "background-color: var(--bs-danger-bg-subtle);" %>
       <% end %>
     </div>
   </div>

@@ -18,14 +18,14 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, controllers: {
-    sessions: "users/sessions",
+    sessions: 'users/sessions',
     registrations: "users/registrations",
     passwords: "users/passwords",
     confirmations: "users/confirmations",
     unlocks: "users/unlocks"
   }
 
-  resources :users, only: [ :index ] do
+  resources :users do
     member do
       patch :make_admin
       patch :remove_admin

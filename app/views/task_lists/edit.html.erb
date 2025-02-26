@@ -1,11 +1,38 @@
 <!-- app/views/task_lists/edit.html.erb -->
 <div class="container py-4">
-  <div class="card shadow-sm">
-    <div class="card-header bg-light">
-      <h1 class="h3 mb-0">Edit Task List</h1>
-    </div>
-    <div class="card-body">
-      <%= render 'form', task_list: @task_list %>
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-9">
+      <div class="card shadow-sm border-0">
+        <div class="card-header border-0" style="background-color: var(--bs-success-bg-subtle);">
+          <h2 class="card-title mb-0">Edit Task List</h2>
+        </div>
+
+        <div class="card-body">
+          <%= form_with(model: [@project, @task_list], local: true) do |f| %>
+            <div class="mb-3">
+              <%= f.label :title, class: "form-label" %>
+              <%= f.text_field :title, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :description, class: "form-label" %>
+              <%= f.text_area :description, class: "form-control", rows: 4 %>
+            </div>
+
+            <div class="actions">
+              <%= f.submit "Update Task list", 
+                  class: "btn",
+                  style: "background-color: var(--bs-danger-bg-subtle);" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="card-footer border-0 bg-light">
+          <div class="d-flex gap-2">
+            <%= link_to "Back to task list", project_task_list_path(@project, @task_list), class: "btn btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
