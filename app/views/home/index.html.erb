@@ -1,4 +1,4 @@
-<div class="container d-flex justify-content-center pt-5">
+<div class="container d-flex justify-content-center pt-5 pb-5"> <!-- Added pb-5 for bottom margin -->
   <div class="card shadow-lg border-0" style="max-width: 35rem;">
     <div class="card-body p-4">
       <div class="text-center">
@@ -13,27 +13,38 @@
         </p>
       </div>
 
-      <div class="bg-light rounded-4 p-4 mb-4">
+      <div class="bg-light rounded-4 p-4 mb-4 text-center"> <!-- Added text-center here -->
         <h2 class="h5 fw-bold mb-3">About Our Platform</h2>
-        <p class="text-secondary mb-2">
+        <p class="text-secondary mb-2 small"> <!-- Added small class for smaller text -->
           We're dedicated to making project management simple and effective. 
           Our platform helps teams stay organized, meet deadlines, and achieve their goals.
         </p>
-        <p class="text-secondary mb-0">
+        <p class="text-secondary mb-0 small"> <!-- Added small class for smaller text -->
           Whether you're managing a small team or a large organization, 
           Basecamp provides the tools you need to succeed.
         </p>
       </div>
 
-      <div class="text-center">
-        <div class="btn-group justify-content-center" role="group" style="width: auto; display: inline-flex;">
-          <%= link_to "Get Started", new_user_registration_path, 
-              class: "btn btn-lg border border-white", 
-              style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
-          <%= link_to "Log In", new_user_session_path, 
-              class: "btn btn-lg border border-white", 
-              style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
-        </div>
+      <div class="text-center mb-4">
+        <% if user_signed_in? %>
+          <div class="btn-group justify-content-center" role="group" style="width: auto; display: inline-flex;">
+            <%= link_to "My Projects", projects_path,
+                 class: "btn btn-lg border border-white",
+                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+            <%= link_to "Create New Project", new_project_path,
+                 class: "btn btn-lg border border-white",
+                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+          </div>
+        <% else %>
+          <div class="btn-group justify-content-center" role="group" style="width: auto; display: inline-flex;">
+            <%= link_to "Get Started", new_user_registration_path,
+                 class: "btn btn-lg border border-white",
+                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+            <%= link_to "Log In", new_user_session_path,
+                 class: "btn btn-lg border border-white",
+                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+          </div>
+        <% end %>
       </div>
       <style>
         .btn:hover {
@@ -43,11 +54,10 @@
       </style>
     </div>
     
-    <div class="card-footer bg-dark-subtle text-secondary text-center">
+    <div class="card-footer bg-dark-subtle text-secondary text-center py-2">
       <span class="text-muted" style="font-size: 0.8rem;">
         This tool is built as part of a StartSchool assignment and is completely free to use.
       </span>
     </div>
   </div>
 </div>
-
