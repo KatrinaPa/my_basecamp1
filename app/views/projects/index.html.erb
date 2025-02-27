@@ -1,95 +1,70 @@
 <div class="container py-4">
-  <!-- Header Section -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="display-6 mb-0">My Projects</h1>
-    <%= link_to new_project_path, class: "btn btn-lg border-0", style: "background-color: var(--bs-danger-bg-subtle); transition: all 0.3s;" do %>
+  <!-- Navigation Buttons -->
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <div class="d-flex flex-wrap gap-2">
+      <a href="#created-projects" 
+         class="btn border-0 nav-btn text-white" 
+         style="background-color: #6c757d; transition: all 0.3s;">
+        <i class="bi bi-person-workspace me-2"></i>My Projects
+      </a>
+      
+      <a href="#joined-projects" 
+         class="btn border-0 nav-btn text-white" 
+         style="background-color: #6c757d; transition: all 0.3s;">
+        <i class="bi bi-people-fill me-2"></i>Projects I Participate In
+      </a>
+    </div>
+
+    <%= link_to new_project_path, 
+        class: "btn border-0", 
+        style: "background-color: var(--bs-danger-bg-subtle); transition: all 0.3s;" do %>
       <i class="bi bi-plus-circle me-2"></i>New Project
     <% end %>
   </div>
 
-    <!-- Projects Grid -->
+  <!-- Projects Created by Me -->
+  <div class="mb-5" id="created-projects">
+    <h2 class="h4 mb-4">
+      <i class="bi bi-person-workspace text-success me-2"></i>
+      Projects Created by Me
+    </h2>
+    
     <div class="row g-4">
-      <% @projects.each do |project| %>
-        <div class="col-sm-6 col-lg-4">
-          <div class="card h-100 shadow-sm border-0 hover-shadow" style="transition: all 0.3s ease">
-            <!-- Card Header -->
-            <div class="card-header border-0 py-3" style="background-color: var(--bs-success-bg-subtle);">
-              <h5 class="card-title text-truncate mb-2" title="<%= project.name %>">
-                <%= project.name %>
-              </h5>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex gap-3 text-muted small">
-                  <div title="Project Creator">
-                    <i class="bi bi-person-circle"></i>
-                    <%= project.user.name || project.user.email %>
-                  </div>
-                  <div title="Total Members">
-                    <i class="bi bi-people-fill"></i>
-                    <%= project.project_memberships.count + 1 %> members
-                  </div>
-                </div>
-
-                <% active_task_lists_count = project.task_lists.where("completion_percentage < ?", 100).count %>
-                <% if active_task_lists_count > 0 %>
-                  <%= link_to project_task_lists_path(project), 
-                      class: "text-decoration-none text-muted small",
-                      title: "View Task Lists" do %>
-                    <i class="bi bi-list-check fs-5 align-middle"></i>
-                    <%= active_task_lists_count %> To-Dos
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
-            
-            <!-- Card Body -->
-            <div class="card-body">
-              <div class="text-muted small mb-2">
-                <i class="bi bi-calendar-event me-1"></i>
-                Created <%= time_ago_in_words(project.created_at) %> ago
-              </div>
-              <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                <%= project.description %>
-              </p>
-            </div>
-
-            <!-- Card Footer -->
-            <div class="card-footer bg-light border-0">
-              <div class="d-flex gap-2 justify-content-end">
-              <%= link_to project, class: "btn btn-outline-secondary btn-sm", title: "View Details" do %>
-              <i class="bi bi-eye"></i>
-              <% end %>
-              <% if project.admin?(current_user) %>
-              <%= link_to edit_project_path(project), class: "btn btn-outline-secondary btn-sm", title: "Edit Project" do %>
-              <i class="bi bi-pencil"></i>
-              <% end %>
-              <%= button_to project, method: :delete, class: "btn btn-outline-danger btn-sm",
-              data: { confirm: "Are you sure you want to delete this project?" }, title: "Delete Project" do %>
-              <i class="bi bi-trash"></i>
-              <% end %>
-              <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      <% end %>
-
-      <!-- Empty State -->
-      <% if @projects.empty? %>
-        <div class="col-12 text-center py-5">
-          <div class="card bg-light shadow-sm border-0 p-4 mt-5">
-            <div class="text-muted">
-              <i class="bi bi-folder-plus display-3"></i>
-              <h3 class="mt-3">No Projects Found</h3>
-              <p>Start by creating your first project!</p>
-              <%= link_to new_project_path, class: "btn btn-lg", style: "background-color: var(--bs-danger-bg-subtle);" do %>
-                <i class="bi bi-plus-circle me-2"></i>Create Project
-              <% end %>
-            </div>
-          </div>
-        </div>
+      <% @projects.where(user: current_user).each do |project| %>
+        <%= render 'project_card', project: project %>
       <% end %>
     </div>
   </div>
+
+  <!-- Projects I've Joined -->
+  <div id="joined-projects">
+    <h2 class="h4 mb-4">
+      <i class="bi bi-people-fill text-success me-2"></i>
+      Projects I've Joined
+    </h2>
+    
+    <div class="row g-4">
+      <% @projects.where.not(user: current_user).each do |project| %>
+        <%= render 'project_card', project: project %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <% if @projects.empty? %>
+    <div class="text-center py-5">
+      <div class="card bg-light shadow-sm border-0 p-4 mt-5">
+        <div class="text-muted">
+          <i class="bi bi-folder-plus display-3"></i>
+          <h3 class="mt-3">No Projects Found</h3>
+          <p>Start by creating your first project!</p>
+          <%= link_to new_project_path, class: "btn btn-lg", style: "background-color: var(--bs-danger-bg-subtle);" do %>
+            <i class="bi bi-plus-circle me-2"></i>Create Project
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <style>
@@ -98,8 +73,19 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   }
   
+  /* Remove the general btn hover style */
   .btn:hover {
     background-color: var(--bs-danger) !important;
     color: white !important;
+  }
+
+  /* Update navigation button hover styles */
+  .nav-btn:hover {
+    background-color: var(--bs-success-bg-subtle) !important;
+    color: #212529 !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 </style>

@@ -1,63 +1,59 @@
-<div class="container d-flex justify-content-center pt-5 pb-5"> <!-- Added pb-5 for bottom margin -->
-  <div class="card shadow-lg border-0" style="max-width: 35rem;">
-    <div class="card-body p-4">
-      <div class="text-center">
-        <%= image_tag "logo3.png", class: "card-img-top", alt: "CollabHub Logo", style: "max-width: 200px; display: block; margin: 0 auto;" %>
-      </div>
-      
-      <div class="text-center mt-4">
-        <h2 class="card-title">Welcome to My Basecamp</h2>
-        <p class="lead text-secondary mb-4">
-          Manage your projects efficiently and<br>
-          collaborate with your team.
-        </p>
-      </div>
-
-      <div class="bg-light rounded-4 p-4 mb-4 text-center"> <!-- Added text-center here -->
-        <h2 class="h5 fw-bold mb-3">About Our Platform</h2>
-        <p class="text-secondary mb-2 small"> <!-- Added small class for smaller text -->
-          We're dedicated to making project management simple and effective. 
-          Our platform helps teams stay organized, meet deadlines, and achieve their goals.
-        </p>
-        <p class="text-secondary mb-0 small"> <!-- Added small class for smaller text -->
-          Whether you're managing a small team or a large organization, 
-          Basecamp provides the tools you need to succeed.
-        </p>
-      </div>
-
-      <div class="text-center mb-4">
+<div class="container py-5">
+  <div class="row justify-content-center text-center">
+    <!-- Header and Text Section -->
+    <div class="col-12 mb-4">
+      <h1 class="display-5 fw-bold mb-3">Welcome to My Basecamp</h1>
+      <p class="lead mb-4">Manage your projects, collaborate with team members, and stay organized – all in one place.</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-center">
         <% if user_signed_in? %>
-          <div class="btn-group justify-content-center" role="group" style="width: auto; display: inline-flex;">
-            <%= link_to "My Projects", projects_path,
-                 class: "btn btn-lg border border-white",
-                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
-            <%= link_to "Create New Project", new_project_path,
-                 class: "btn btn-lg border border-white",
-                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+          <div class="btn-group" role="group">
+            <!-- Light Green Button (success-subtle) for My Projects -->
+            <%= link_to "My Projects", projects_path, class: "btn btn-lg border border-white", style: "background-color: var(--bs-success-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+            <%= link_to "Create New Project", new_project_path, class: "btn btn-lg border border-white", style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
           </div>
         <% else %>
-          <div class="btn-group justify-content-center" role="group" style="width: auto; display: inline-flex;">
-            <%= link_to "Get Started", new_user_registration_path,
-                 class: "btn btn-lg border border-white",
-                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
-            <%= link_to "Log In", new_user_session_path,
-                 class: "btn btn-lg border border-white",
-                 style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+          <div class="btn-group" role="group">
+            <!-- Light Green Button (success-subtle) for Get Started -->
+            <%= link_to "Get Started", new_user_registration_path, class: "btn btn-lg border border-white", style: "background-color: var(--bs-success-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
+            <%= link_to "Log In", new_user_session_path, class: "btn btn-lg border border-white", style: "background-color: var(--bs-danger-bg-subtle); transition: background-color 0.3s, color 0.3s;" %>
           </div>
         <% end %>
       </div>
-      <style>
-        .btn:hover {
-          background-color: var(--bs-danger);
-          color: white;
-        }
-      </style>
     </div>
-    
-    <div class="card-footer bg-dark-subtle text-secondary text-center py-2">
-      <span class="text-muted" style="font-size: 0.8rem;">
-        This tool is built as part of a StartSchool assignment and is completely free to use.
-      </span>
+
+    <!-- Image Section -->
+    <div class="col-12 mb-4">
+      <%= image_tag "team2.jpg", class: "img-fluid rounded shadow-lg", style: "width: 100%; max-height: 500px; object-fit: cover;" %>
     </div>
   </div>
+
+  <!-- About Section -->
+  <div class="bg-light rounded-4 p-4 mt-5 text-center mx-auto about-section">
+    <h2 class="h5 fw-bold mb-3">About Our Platform</h2>
+    <p class="text-secondary mb-2 small">
+      We're dedicated to making project management simple and effective. Our platform helps teams stay organized, meet deadlines, and achieve their goals.
+    </p>
+    <p class="text-secondary mb-0 small">
+      Whether you're managing a small team or a large organization, Basecamp provides the tools you need to succeed.
+    </p>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="text-center text-secondary py-3 mt-4">
+    <span class="text-muted" style="font-size: 0.8rem;">
+      This tool is built as part of a StartSchool assignment and is completely free to use.
+    </span>
+  </div>
 </div>
+
+<style>
+  .btn:hover {
+    color: white;
+  }
+
+  @media (min-width: 720px) {
+    .container, .about-section {
+      max-width: 720px;
+    }
+  }
+</style>

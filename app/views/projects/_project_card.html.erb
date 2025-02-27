@@ -1,0 +1,61 @@
+<div class="col-sm-6 col-lg-4">
+  <div class="card h-100 shadow-sm border-0 hover-shadow" style="transition: all 0.3s ease">
+    <!-- Card Header -->
+    <div class="card-header border-0 py-3" style="background-color: var(--bs-success-bg-subtle);">
+      <h5 class="card-title text-truncate mb-2" title="<%= project.name %>">
+        <%= project.name %>
+      </h5>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-3 text-muted small">
+          <div title="Project Creator">
+            <i class="bi bi-person-circle"></i>
+            <%= project.user.name || project.user.email %>
+          </div>
+          <div title="Total Members">
+            <i class="bi bi-people-fill"></i>
+            <%= project.project_memberships.count + 1 %> members
+          </div>
+        </div>
+
+        <% active_task_lists_count = project.task_lists.where("completion_percentage < ?", 100).count %>
+        <% if active_task_lists_count > 0 %>
+          <%= link_to project_task_lists_path(project), 
+              class: "text-decoration-none text-muted small",
+              title: "View Task Lists" do %>
+            <i class="bi bi-list-check fs-5 align-middle"></i>
+            <%= active_task_lists_count %> To-Dos
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Card Body -->
+    <div class="card-body">
+      <div class="text-muted small mb-2">
+        <i class="bi bi-calendar-event me-1"></i>
+        Created <%= time_ago_in_words(project.created_at) %> ago
+      </div>
+      <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+        <%= project.description %>
+      </p>
+    </div>
+
+    <!-- Card Footer -->
+    <div class="card-footer bg-light border-0">
+      <div class="d-flex gap-2 justify-content-end">
+        <%= link_to project, class: "btn btn-outline-secondary btn-sm", title: "View Details" do %>
+          <i class="bi bi-eye"></i>
+        <% end %>
+        <% if project.admin?(current_user) %>
+          <%= link_to edit_project_path(project), class: "btn btn-outline-secondary btn-sm", title: "Edit Project" do %>
+            <i class="bi bi-pencil"></i>
+          <% end %>
+          <%= button_to project, method: :delete, class: "btn btn-outline-danger btn-sm",
+              data: { confirm: "Are you sure you want to delete this project?" }, title: "Delete Project" do %>
+            <i class="bi bi-trash"></i>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div> 
