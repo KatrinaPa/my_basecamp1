@@ -4,20 +4,32 @@
 
 **My Basecamp 1** is a web-based project management application built using Ruby on Rails. It mimics the core features of the original Basecamp tool, enabling users to organize, manage, and track projects efficiently.
 
+## Task
+
+Building a lightweight project management tool inspired by Basecamp. The challenge was to create a functional application where users can register, create projects, assign admin roles, and manage tasks efficiently within a team environment. The key challenges included implementing user authentication, project-specific permission systems, and creating a clean, intuitive user interface for task management.
+
 ## Screenshots
 
-<img src="/app/assets/images/scr1.png" width="300">
-<img src="/app/assets/images/scr2.png" width="300">
+<p>
+  <img src="/app/assets/images/scr1.png" width="300" style="display: inline-block; margin-right: 10px;">
+  <img src="/app/assets/images/scr2.png" width="300" style="display: inline-block;">
+</p>
 
-This project allows users to:
+## Description
 
-- **Sign up and Sign in**: Users can create accounts, sign in, and securely manage their profiles.
-- **Create, Edit, and Delete Projects**: Users can create new projects, edit existing ones, or delete them if necessary.
-- **Manage Project Members**: The creator of a project (or admin) can invite other users to join as project members and assign roles (admin or member).
-- **Assign and Track To-Do Tasks**: Within each project, project creator (or admin) can create tasks to track progress and set deadlines, ensuring the team stays on target.
-- **Role-Based Access Control**: Users have different levels of access, such as admins who can manage project members, and regular members who can contribute to tasks and discussions.
+My Basecamp 1 is a Ruby on Rails application that provides essential project management functionality:
 
-This README will guide you through setting up and running the **My Basecamp 1** application on your local machine, from installation to database configuration and running the server.
+This application provides:
+
+- **User Authentication**: Register, login, and securely manage user profiles
+- **Project Management**: Create, edit, and delete projects
+- **Permission System**: Project-specific admin roles for fine-grained access control
+- **Team Collaboration**: The creator of a project (or admin) can invite other users to join as project members and assign roles (admin or member)
+- **Task Management**: Create task lists and manage individual tasks with completion tracking within each project
+- **User-friendly Interface**: Clean, intuitive interface built with Bootstrap for responsive design
+  The project follows the MVC (Model-View-Controller) architecture with RESTful routing and responsive design principles for an efficient user experience.
+
+README will guide you through setting up and running the **My Basecamp 1** application on your local machine, from installation to database configuration and running the server.
 
 ## Ruby Version
 
@@ -108,6 +120,17 @@ The project follows the **MVC (Model-View-Controller)** architecture and include
 - **Project Management**: Users can create, edit, and delete projects. The project owner (creator) can add other members, assign roles (Promote to Admin or Demote to Member), and manage tasks within the project.
 - **To-Do Tasks**: The project owner can set and manage To-Do tasks within each project to track progress and deadlines.
 - **User Interface**: A clean, intuitive, and user-friendly interface for managing projects, users, and tasks, ensuring an efficient user experience.
+
+**Example workflow:**
+
+```
+1. Register a new account
+2. Create a new project
+3. Add members to your project
+4. Create task lists
+5. Add and manage tasks
+6. Track progress through completion percentages
+```
 
 ## Credits
 
