@@ -4,6 +4,12 @@
 
 **My Basecamp 1** is a web-based project management application built using Ruby on Rails. It mimics the core features of the original Basecamp tool, enabling users to organize, manage, and track projects efficiently.
 
+## Screenshots
+
+<img src="app/assets/images/Screenshot1.png" width="400">
+<img src="app/assets/images/Screenshot2.png" width="400"> 
+<img src="app/assets/images/Screenshot3.png" width="400"> 
+
 This project allows users to:
 
 - **Sign up and Sign in**: Users can create accounts, sign in, and securely manage their profiles.
@@ -126,4 +132,4 @@ The project follows the **MVC (Model-View-Controller)** architecture and include
 
 ## Credits
 
-This project was developed by **Jurga Kupstyte (kupstyte_j)** and **Katrina Pastore Ozolina (pastore-\_k)** as part of a school assignment for **Start School**.
+This project was developed by **Katrina Pastore Ozolina (pastore-\_k)** and **Jurga Kupstyte (kupstyte_j)** as part of a school assignment for **Start School**.
