@@ -11,7 +11,7 @@ Building a lightweight project management tool inspired by Basecamp. The challen
 ## Screenshots
 
 <p>
-  <img src="/app/assets/images/scr1.png" width="300" style="display: inline-block; margin-right: 10px;">
+  <img src="/app/assets/images/scr1.png" width="300" style="display: inline-block; margin-right: 50px;">
   <img src="/app/assets/images/scr2.png" width="300" style="display: inline-block;">
 </p>
 
